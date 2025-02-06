@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block styles %}
+  <title>Home Rental</title>
+  <link rel="stylesheet" href="{% static '/core/css/homePage.css' %}">
+{% endblock styles %}
+
+{% block content %}
+  <section id="home" style="background-image:url({% static '/core/images/home_background.jpeg' %})">
+    <div class="home_container">
+      <div class="logo_home">
+        <img src="{% static '/core/images/logo2.png' %}" alt="" height="600px">
+      </div>
+      <h1>Houses, condos and apartments for rent.</h1>
+      <div class="button_center">
+        <a href="{% url 'frontpage' %}"><button class="buttons_home">Let's Start!</button></a>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+
+
