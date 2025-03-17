@@ -1,0 +1,128 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add property | {% endblock %}
+
+{% block styles %}
+    <style>
+        .container h1{
+            margin-top: 20px;
+        }
+        .container{
+            height: 100vh
+            weight: 100vw;
+            margin-bottom: 30px;
+
+        }
+        .inner {
+        weight: 40vw;
+            padding: 10px 100px;
+        }
+        .control{
+            text-align: center;
+        }
+        .control button{
+            width: 220px;
+        }
+    </style>
+{% endblock styles %}
+
+{% block content %}
+    <div class="container">
+        <p style="margin-bottom: 20px;"><a href="{% url 'profile' %}">Profile</a>/ Add_Property</p>
+        <hr>
+        <h1 class="title" style="text-align: center;">Add Property</h1>
+
+        <div class="form-group inner">
+            <form method="post" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form|crispy }}
+            
+                <h3>Select location of property *</h3>
+                <!-- Button to open the map for location selection -->
+                <button type="button" onclick="openMap()">Select Location</button>
+                <button type="button" onclick="useMyLocation()">Use My Location</button>
+                
+                <!-- Map container -->
+                <div id="map" style="height: 400px;"></div>
+                <input type="hidden" name="latitude" id="latitude" value="">
+                <input type="hidden" name="longitude" id="longitude" value="">
+
+                
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-dark is-uppercase">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Include Leaflet library -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Script to handle opening the map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+      var mymap;
+      var marker;
+      
+      function openMap() {
+        mymap = L.map('map').setView([27.7172, 85.3240], 12);
+        
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(mymap);
+        
+        marker = L.marker([51.505, -0.09], { draggable: true }).addTo(mymap);
+        L.Control.geocoder({
+          draggable: true  // Make the geocoder control draggable
+        }).addTo(mymap);
+        
+        // Function to update hidden input fields with marker's coordinates
+        function updateMarkerCoordinates() {
+          document.getElementById('latitude').value = marker.getLatLng().lat;
+          document.getElementById('longitude').value = marker.getLatLng().lng;
+        }
+    
+        // Initial update of hidden input fields
+        updateMarkerCoordinates();
+    
+        // Event listener for marker dragend
+        marker.on('dragend', function (e) {
+          // Update hidden input fields with marker's new coordinates
+          updateMarkerCoordinates();
+        });
+    
+        // Event listener for map click
+        mymap.on('click', function (e) {
+          // Move marker to the clicked location
+          marker.setLatLng(e.latlng);
+          // Update hidden input fields with marker's new coordinates
+          updateMarkerCoordinates();
+        });
+      }
+    
+      function useMyLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+    
+            // Set marker to user's current location
+            marker.setLatLng(userLatLng);
+            mymap.setView(userLatLng);
+    
+            // Update hidden input fields with user's current coordinates
+            updateMarkerCoordinates();
+          });
+        } else {
+          alert("Geolocation is not supported by your browser.");
+        }
+      }
+    </script>
+{% endblock %}
