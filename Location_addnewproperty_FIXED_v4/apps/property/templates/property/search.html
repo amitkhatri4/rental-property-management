@@ -1,0 +1,66 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="columns is-multiline mb-6">
+    <div class="column is-12 has-text-centered mt-6 mb-6">
+        <h2 class="is-size-3">Search</h2>
+
+        <div class="box mb-5">
+            <form method="get" action="{% url 'search' %}">
+                <div class="columns is-multiline is-vcentered">
+                    <div class="column is-3">
+                        <input class="input" type="text" name="query" value="{{ query }}" placeholder="Search term">
+                    </div>
+                    <div class="column is-2">
+                        <div class="select is-fullwidth">
+                            <select name="category">
+                                <option value="">All Categories</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.slug }}" {% if cat.slug == selected_category %}selected{% endif %}>
+                                        {{ cat.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <input class="input" type="number" name="min_price" value="{{ min_price }}" placeholder="Min Price">
+                    </div>
+                    <div class="column is-2">
+                        <input class="input" type="number" name="max_price" value="{{ max_price }}" placeholder="Max Price">
+                    </div>
+                    <div class="column is-2">
+                        <input class="input" type="text" name="location" value="{{ location }}" placeholder="Location">
+                    </div>
+                    <div class="column is-1">
+                        <button class="button is-dark is-fullwidth" type="submit">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="content has-text-left ml-6">
+            {% if query %}
+                <p><strong>Search term:</strong> "{{ query }}"</p>
+            {% endif %}
+            {% if selected_category_title %}
+                <p><strong>Category:</strong> {{ selected_category_title }}</p>
+            {% endif %}
+            {% if location %}
+                <p><strong>Location:</strong> {{ location }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% for item in properties %}
+        {% include 'property/parts/list_item.html' with property=item %}
+    {% empty %}
+        <div class="column is-12 has-text-centered">
+            <p>No properties found matching your criteria.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
