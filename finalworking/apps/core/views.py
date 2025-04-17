@@ -18,7 +18,7 @@ def contact(request):
             'Message from ' + name,
             message,
             email,
-            ['sandipkhadka9810@gmail.com', email],
+            ['khatriamit231@gmail.com', email],
         )
 
         return render(request, 'core/contact.html', {'name': name})
