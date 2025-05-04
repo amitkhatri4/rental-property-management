@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/AMIT-PC/Desktop",
-      "program": "c:/Users/AMIT-PC/Desktop/build/Debug/outDebug",
+      "cwd": "c:/Users/AMIT-PC/Downloads/chatbotworking",
+      "program": "c:/Users/AMIT-PC/Downloads/chatbotworking/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

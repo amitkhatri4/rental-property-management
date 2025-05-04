@@ -21,11 +21,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
+    path('chat/', include('chatbot.urls')),  
+
     path('blog/', include('apps.blog.urls')),
     path('login/', include('apps.registration.urls')),
     path('home/', include('apps.home.urls')),
     path('cart/', include('apps.cart.urls')),
     path('', include('apps.property.urls')),
-    path('chat/', include('apps.chat.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
